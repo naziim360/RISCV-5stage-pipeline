@@ -1,0 +1,32 @@
+# ---- ModelSim generated files ----
+sim/work/
+sim/transcript
+sim/*.wlf
+sim/*.vstf
+sim/*.ini
+sim/*.bak
+**/*.bak
+
+# ---- Compiled/binary junk ----
+*.o
+*.out
+*.exe
+
+# ---- Large external tools ----
+tools/*.jar
+rars/*.jar
+
+# ---- OS / editor junk ----
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# ---- WSL / toolchain build artifacts, if generated inside project folder ----
+asm/*.o
+asm/*.elf
+
+#----doc----
+*.pdf
+

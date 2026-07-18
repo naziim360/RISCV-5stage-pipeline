@@ -1,17 +1,17 @@
 module regfile (
     input logic clk,
-    input logic we,
-    input logic[4:0] rs1_addr,
-    input logic[4:0] rs2_addr,
-    input logic[4:0] rd_addr,
-    input logic[31:0] rd_data,
+    input logic we,             // write enable
+    input logic[4:0] rs1_addr,  // first source register num
+    input logic[4:0] rs2_addr,  // second source register num
+    input logic[4:0] rd_addr,   // destination register num
+    input logic[31:0] rd_data,  // destination register data
 
-    output logic[31:0] rs1_data,
-    output logic[31:0] rs2_data
+    output logic[31:0] rs1_data, // first source register data
+    output logic[31:0] rs2_data  // second source register data
 );
 
 
-//the 32 registers
+//  the 32 registers
 logic[31:0] registers [0:31];
 
 

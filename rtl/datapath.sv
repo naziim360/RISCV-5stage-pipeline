@@ -78,10 +78,7 @@ import alu_pkg::*;
     end
 
     // instruction fetch
-    I_mem #(
-        .DEPTH_WORDS(256),
-        .INIT_FILE("../asm/prog.mem")
-    ) u_i_mem(
+    I_mem u_i_mem(
         .addr  (pc),
         .instr (instruction)
     );
@@ -143,7 +140,7 @@ import alu_pkg::*;
     );
     
 
-    D_mem u_d_mem(
+    D_mem u_d_mem(  
         .clk (clk),
         .mem_read (mem_read),
         .mem_write (mem_write),
@@ -161,6 +158,7 @@ import alu_pkg::*;
         endcase
     end
     
+
 
 
 endmodule 

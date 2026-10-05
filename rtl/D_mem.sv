@@ -1,9 +1,8 @@
-// D_mem.sv -- Data Memory (behavioral, simulation-only)
-
 module D_mem #(
-    parameter int    DEPTH_WORDS = 256,
+    parameter int    DEPTH_WORDS = 16,
     parameter bit    PRELOAD     = 1'b0,
-    parameter string INIT_FILE   = "../asm/dmem_test.mem"
+	parameter DMEM_INIT_FILE = "../asm/prog.mem"
+	 
 ) (
     input  logic        clk,
     input  logic        mem_read, // unused for now
@@ -17,7 +16,7 @@ module D_mem #(
 
     initial begin
         if (PRELOAD) begin
-            $readmemh(INIT_FILE, mem);
+            $readmemh(DMEM_INIT_FILE, mem);
         end
     end
 

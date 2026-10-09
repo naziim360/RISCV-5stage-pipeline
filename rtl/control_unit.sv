@@ -38,7 +38,8 @@ module control_unit
         alu_src_b  = 1'b0;    // rs2
         alu_op     = ALU_ADD;
         result_src = 2'b00;   // alu_result
-
+        uses_rs1   = 1'b0;
+        uses_rs2   = 1'b0;  
 
         case (opcode_t'(opcode))
 
@@ -48,6 +49,8 @@ module control_unit
                 alu_src_a  = 2'b00;  // rs1
                 alu_src_b  = 1'b0;   // rs2
                 result_src = 2'b00;  // alu_result
+                uses_rs1   = 1'b1;
+                uses_rs2   = 1'b1;
 
                 case (funct3)
                     3'b000:  if (funct7_b5) alu_op = ALU_SUB; else alu_op = ALU_ADD;
@@ -68,6 +71,7 @@ module control_unit
                 alu_src_a  = 2'b00;  // rs1
                 alu_src_b  = 1'b1;   // imm
                 result_src = 2'b00;  // alu_result
+                uses_rs1   = 1'b1;
 
                 case (funct3)
                     3'b000:  if (funct7_b5) alu_op = ALU_SUB; else alu_op = ALU_ADD;
@@ -90,6 +94,7 @@ module control_unit
                 alu_src_b  = 1'b1;   // imm  (address = rs1 + imm)
                 alu_op     = ALU_ADD;
                 result_src = 2'b01;  // mem data
+                uses_rs1   = 1'b1;
             end
 
             // Stores: sw
@@ -98,6 +103,8 @@ module control_unit
                 alu_src_a  = 2'b00;  // rs1
                 alu_src_b  = 1'b1;   // imm  (address = rs1 + imm)
                 alu_op     = ALU_ADD;
+                uses_rs1   = 1'b1;
+                uses_rs2   = 1'b1;
             end
             
             // branches: beq, bne, blt, bge, bltu, bgeu
@@ -106,6 +113,8 @@ module control_unit
                 alu_src_a  = 2'b01;  // pc
                 alu_src_b  = 1'b1;   // imm
                 alu_op     = ALU_ADD;
+                uses_rs1   = 1'b1;
+                uses_rs2   = 1'b1;
             end
 
             // jal: unconditional jump, 
@@ -131,6 +140,7 @@ module control_unit
                 alu_src_b  = 1'b1;   // imm   
                 alu_op     = ALU_ADD;
                 result_src = 2'b10;  // pc + 4
+                uses_rs1   = 1'b1;
             end
 
             // lui: rd <- imm  (imm << 12 already done in imm_gen)

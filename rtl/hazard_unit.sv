@@ -1,14 +1,17 @@
 // hazard_unit.sv -- Load-use hazard detection
 module hazard_unit(
-    input logic  ex_mem_load,
-    input logic [4:0] ex_mem_rd,
-    input logic [4:0] id_ex_rs1, id_ex_rs2,
+    input logic  id_ex_mem_read,
+    input logic [4:0] id_ex_rd_addr,
+    input logic [4:0] id_rs1_addr ,id_rs2_addr,
+    input logic id_uses_rs1, id_uses_rs2,  
+
     output logic stall
       
 );
     always_comb begin
-        stall = ex_mem_load                                    //load instruction in ex/mem
-                && ex_mem_rd != 5'b0                           //rd is not r0
-                && (ex_mem_rd == id_ex_rs1||ex_mem_rd == id_ex_rs2);   // one of the source register in id/ex is same as rd in ex/mem
+        stall = id_ex_mem_read                                      // load instruction in id/ex
+                && id_ex_rd_addr != 5'b0                           // rd is not r0
+                && ( ((id_ex_rd_addr == id_rs1_addr ) && id_uses_rs1) || ((id_ex_rd_addr == id_rs2_addr) && id_uses_rs2));
+                // one of the source registers in if/id is the same as rd in id/ex
     end
 endmodule

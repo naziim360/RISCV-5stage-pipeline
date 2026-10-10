@@ -2,25 +2,27 @@
 // Purely combinational. Decodes opcode/funct3/funct7 into every
 // control signal the rest of the datapath needs.
 
-module control_unit
-    import riscv_opcodes_pkg::*;
-    import alu_pkg::*;
-(
+module control_unit (
     input  logic [6:0] opcode,
     input  logic [2:0] funct3,
     input  logic [6:0] funct7,
 
-    output logic        reg_write,
-    output logic        mem_read,
-    output logic        mem_write,
-    output logic        branch,
-    output logic        jump,
-    output logic        jalr,
-    output logic [1:0]  alu_src_a,
-    output logic        alu_src_b,
-    output alu_op_t      alu_op,
-    output logic [1:0]  result_src
+    output logic       reg_write,
+    output logic       mem_read,
+    output logic       mem_write,
+    output logic       branch,
+    output logic       jump,
+    output logic       jalr,
+    output logic [1:0] alu_src_a,
+    output logic       alu_src_b,
+    output alu_pkg::alu_op_t alu_op,
+    output logic [1:0] result_src,
+    output logic       uses_rs1,
+    output logic       uses_rs2
 );
+
+    import riscv_opcodes_pkg::*;
+    import alu_pkg::*;
 
     // funct7 bit [5] to distinguish SUB from ADD, and SRA from SRL
     logic funct7_b5;
@@ -74,7 +76,7 @@ module control_unit
                 uses_rs1   = 1'b1;
 
                 case (funct3)
-                    3'b000:  if (funct7_b5) alu_op = ALU_SUB; else alu_op = ALU_ADD;
+                    3'b000:  alu_op = ALU_ADD;
                     3'b001:  alu_op = ALU_SLL;
                     3'b010:  alu_op = ALU_SLT;
                     3'b011:  alu_op = ALU_SLTU;

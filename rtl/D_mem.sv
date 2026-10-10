@@ -5,7 +5,7 @@ module D_mem #(
 	 
 ) (
     input  logic        clk,
-    input  logic        mem_read, // unused for now
+    input  logic        mem_read,
     input  logic        mem_write,
     input  logic [31:0] addr,
     input  logic [31:0] write_data,
@@ -15,13 +15,18 @@ module D_mem #(
     logic [31:0] mem [0:DEPTH_WORDS-1];
 
     initial begin
+
+        for (int i = 0; i < DEPTH_WORDS; i++) begin
+            mem[i] = 32'b0;
+        end
+
         if (PRELOAD) begin
             $readmemh(DMEM_INIT_FILE, mem);
         end
     end
 
-    // asynchronous read, word-addressed
-    assign read_data = mem[addr[31:2]];
+    // asynchronous read
+    assign read_data = mem_read ? mem[addr[31:2]] : 32'bx;
 
     // synchronous write
     always_ff @(posedge clk) begin

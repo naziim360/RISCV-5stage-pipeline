@@ -1,5 +1,5 @@
 // riscv single cycle top level module datapath 
-module datapath
+module datapath_single_cycle
 import alu_pkg::*;
 (
     input logic clk,

@@ -12,18 +12,6 @@ rars/
 # ---- WSL / toolchain build artifact ----
 asm/*.o
 asm/*.elf
-# ---- Quartus build output----
-db/
-incremental_db/
-greybox_tmp/
-*.qws
-*.rpt
-*.sof
-*.summary
-*.smsg
-*.jdi
-*.pin
-*.pof
 #----doc----
 *.pdf
 

@@ -1,32 +1,29 @@
-# ---- ModelSim generated files ----
-sim/work/
-sim/transcript
-sim/*.wlf
-sim/*.vstf
-sim/*.ini
-sim/*.bak
+# ---- ModelSim generated file ----
+sim/
 **/*.bak
-
 # ---- Compiled/binary junk ----
 *.o
 *.out
 *.exe
-
 # ---- Large external tools ----
-tools/*.jar
-rars/*.jar
-
-# ---- OS / editor junk ----
-.DS_Store
-Thumbs.db
-*.swp
+rars/
+# ---- editor junk ---
 .vscode/
-.idea/
-
-# ---- WSL / toolchain build artifacts, if generated inside project folder ----
+# ---- WSL / toolchain build artifact ----
 asm/*.o
 asm/*.elf
-
+# ---- Quartus build output----
+db/
+incremental_db/
+greybox_tmp/
+*.qws
+*.rpt
+*.sof
+*.summary
+*.smsg
+*.jdi
+*.pin
+*.pof
 #----doc----
 *.pdf
 

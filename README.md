@@ -29,7 +29,7 @@ The repo contains two implementations of the same ISA subset:
 
 ## Architecture
 
-![5-stage pipeline](docs/pipeline_5stage_FDXMW.svg)
+![5-stage pipeline](datapath.svg)
 
 | Stage | Work done |
 |---|---|
@@ -72,7 +72,7 @@ All verification is self-checking: every testbench prints `PASS` / `FAIL` per ch
 
 **Single-cycle integration:** a 13-instruction program, with a cycle-accurate `check_reg()` for every instruction.
 
-**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction program (see [Test programs](#test-programs-assembly)). Every expected value was computed with a reference RV32I model that decodes the same machine code, and cross-checked against hand-written expectations. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
+**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction program (see [Test program](asm/prog_pipeline.mem) and [`asm/test_program.md`](asm/test_program.md)). Every expected value was computed with a reference RV32I model that decodes the same machine code, and cross-checked against hand-written expectations. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
 
 | Group | Coverage |
 |---|---|
@@ -90,17 +90,15 @@ Three global checks make hazard behaviour measurable:
 - A **poison register (x31) and poison store (`mem[127]`)** placed on wrong paths must never be written, which proves every flush worked.
 
 ### Run it
- in Modelsim terminal:
+
+In the ModelSim terminal, from `sim/`:
+
 ```tcl
 vlib work
-vlog -sv rtl/riscv_opcodes_pkg.sv
-vlog -sv rtl/*.sv tb/tb_datapath_pipeline.sv
+vlog -sv ../rtl/riscv_opcodes_pkg.sv
+vlog -sv ../rtl/*.sv ../tb/tb_datapath_pipeline.sv
 vsim -c work.tb_datapath_pipeline -do "run -all"
 ```
-
----
-
-## Test program (assembly)
 
 ---
 
@@ -147,7 +145,7 @@ All checks pass with positive slack and zero total negative slack.
 ```
 rtl/        SystemVerilog sources (ALU, register file, control, hazard/forwarding, datapaths)
 tb/         Testbenches (unit tests + integration tests)
-asm/        Test programs (machine code, .mem)
+asm/        Test program (.mem) and its explanation (test_program.md)
 FPGA/       Quartus project, DE1 top level, pin assignments, timing constraints
 ```
 
@@ -158,7 +156,6 @@ FPGA/       Quartus project, DE1 top level, pin assignments, timing constraints
 - Only word loads and stores (`lw`, `sw`); byte and halfword accesses would need `funct3` carried to the MEM stage.
 - No traps, CSRs, `fence`, `ecall` or `ebreak`.
 - No branch predictor, caches or interrupts.
-- Memories are read in the same cycle, so the critical path is the load-forwarding path: data memory, forwarding mux, branch compare, PC.
 
 ## Next steps
 

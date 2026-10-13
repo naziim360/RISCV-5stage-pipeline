@@ -1,32 +1,4 @@
-// =============================================================
-// tb_datapath_pipeline.sv.
-//
-// Every expected value comes from a reference RV32I model that
-// decodes the same machine code, and was cross-checked against
-// hand-written expectations by the generator.
-//
-// Needs: I_mem DEPTH_WORDS >= 256, D_mem DEPTH_WORDS = 128.
-//
-// Result words (dmem word 32 onward) are written by the program
-// itself with sw, so a wrong value anywhere shows up as one named
-// FAIL. Coverage:
-//   A  ALU->ALU forwarding: MEM source, WB source, both operands,
-//      dependent chains, MEM-over-WB priority
-//   B  x0: never forwarded, never written
-//   C  loads/stores: store data fwd (MEM and WB), store base fwd,
-//      load-use stall (rs1, rs2, store data, store base), load data
-//      forwarded from WB (wb_data), lw 3 back via regfile, sw->lw
-//      same address, spurious-stall regressions (imm / lui bits
-//      equal to a load's rd), lw x0
-//   D  load -> branch (stall, then fwd into comparator)
-//   E  all six branch types, taken/not taken, signed/unsigned,
-//      backward loop, wrong-path poison after every taken branch
-//   F  jal, jalr (bit0 clear, rs1 fwd), call/return, chained jumps,
-//      link value read by first instr at target (regfile bypass)
-//   G  lui, auipc, every R-type and I-type ALU op
-// =============================================================
-
-module tb_datapath_pipeline;
+// For a detailed explanation, refer to "../asm/test_program.md".
 
     localparam int HALT_PC        = 656;   // address of the final jal x0,0
     localparam int EXP_STALLS     = 5;

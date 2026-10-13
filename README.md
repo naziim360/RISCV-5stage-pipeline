@@ -34,11 +34,10 @@ The repo contains two implementations of the same ISA subset:
 | Stage | Work done |
 |---|---|
 | **IF** | PC register, instruction memory, `pc + 4`, PC mux (sequential or redirect) |
-| **ID** | Decode, control unit, immediate generator, register-file read, Hazard detection |
+| **ID** | Decode, control unit, immediate generator, register-file read, hazard detection |
 | **EX** | Forwarding, ALU, branch comparison, redirect target |
 | **MEM** | Data memory read/write |
 | **WB** | Write-back mux (ALU result / load data / `pc + 4`) into the register file |
-
 
 ### Design decisions worth knowing
 
@@ -72,7 +71,7 @@ All verification is self-checking: every testbench prints `PASS` / `FAIL` per ch
 
 **Single-cycle integration:** a 13-instruction program, with a cycle-accurate `check_reg()` for every instruction.
 
-**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction program (see [Test program](asm/prog_pipeline.mem) and [`asm/test_program.md`](asm/test_program.md)). Every expected value was computed with a reference RV32I model that decodes the same machine code, and cross-checked against hand-written expectations. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
+**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction hand-written program ([`asm/test_program.s`](asm/test_program.s), assembled with RARS into [`asm/prog_pipeline.mem`](asm/prog_pipeline.mem); explained in [`asm/test_program.md`](asm/test_program.md)). Expected values were derived by hand for each scenario. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
 
 | Group | Coverage |
 |---|---|
@@ -99,6 +98,8 @@ vlog -sv ../rtl/riscv_opcodes_pkg.sv
 vlog -sv ../rtl/*.sv ../tb/tb_datapath_pipeline.sv
 vsim -c work.tb_datapath_pipeline -do "run -all"
 ```
+
+To regenerate `asm/prog_pipeline.mem`, assemble `asm/prog_pipeline.s` with [RARS](https://github.com/TheThirdOne/rars): set Settings → "Compact, Text at Address 0", then File → Dump Memory → `.text` → Hexadecimal Text. The address setting matters, because `auipc` and the `jalr` test (`0x1a9`) assume the code starts at address 0.
 
 ---
 
@@ -136,7 +137,7 @@ The register file and data memory are inferred as embedded RAM (`altsyncram`).
 
 All checks pass with positive slack and zero total negative slack.
 
-**Critical path.** The worst setup path (15.776 ns data delay) is : memory read → forwarding mux → branch comparison → PC mux.
+**Critical path.** The worst setup path (15.776 ns data delay) is memory read → forwarding mux → branch comparison → PC mux.
 
 ---
 
@@ -145,7 +146,7 @@ All checks pass with positive slack and zero total negative slack.
 ```
 rtl/        SystemVerilog sources (ALU, register file, control, hazard/forwarding, datapaths)
 tb/         Testbenches (unit tests + integration tests)
-asm/        Test program (.mem) and its explanation (test_program.md)
+asm/        test_program.s (source), prog_pipeline.mem (hex), test_program.md (explanation)
 FPGA/       Quartus project, DE1 top level, pin assignments, timing constraints
 ```
 
@@ -164,4 +165,4 @@ FPGA/       Quartus project, DE1 top level, pin assignments, timing constraints
 
 ## Tools
 
-SystemVerilog · ModelSim · Quartus II 13.0.1 · Git
+SystemVerilog · ModelSim · Quartus II 13.0.1 · RARS · Git

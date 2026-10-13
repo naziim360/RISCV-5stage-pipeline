@@ -71,7 +71,7 @@ All verification is self-checking: every testbench prints `PASS` / `FAIL` per ch
 
 **Single-cycle integration:** a 13-instruction program, with a cycle-accurate `check_reg()` for every instruction.
 
-**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction hand-written program ([`asm/test_program.s`](asm/test_program.s), assembled with RARS into [`asm/prog_pipeline.mem`](asm/prog_pipeline.mem); explained in [`asm/test_program.md`](asm/test_program.md)). Expected values were derived by hand for each scenario. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
+**Pipeline integration (`tb_datapath_pipeline.sv`):** runs a 165-instruction hand-written program ([`asm/prog_pipeline.s`](asm/prog_pipeline.s), assembled with RARS into [`asm/prog_pipeline.mem`](asm/prog_pipeline.mem); explained in [`asm/test_program.md`](asm/test_program.md)). Expected values were derived by hand for each scenario. The program stores its own results to data memory with `sw`, so a wrong value anywhere shows up as one named failure.
 
 | Group | Coverage |
 |---|---|
